@@ -10,6 +10,9 @@ mongoose
   .connect(process.env.mongoDb)
   .then(() => {
     console.log("Mongodb Connected");
+    app.listen(process.env.port || 3000, () => {
+      console.log("Server listening on port " + process.env.port || 3000);
+    });
   })
   .catch((error) => console.log(error));
 
@@ -28,6 +31,6 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/users", userRoutes);
 
-app.listen(process.env.port, () => {
-  console.log("Server listening on port " + process.env.port);
-});
+// app.listen(process.env.port, () => {
+//   console.log("Server listening on port " + process.env.port);
+// });
