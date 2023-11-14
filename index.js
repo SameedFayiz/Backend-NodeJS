@@ -3,15 +3,15 @@ const app = express();
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 const userRoutes = require("./routes/users");
-const port = 3000;
+require("dotenv").config();
 
 // MongoDB connection
 mongoose
-  .connect("mongodb+srv://admin:admin@mern-app.6nm82vp.mongodb.net/")
+  .connect(process.env.mongoDb)
   .then(() => {
     console.log("Mongodb Connected");
   })
-  .catch((err) => console.log(err));
+  .catch((error) => console.log(error));
 
 // Middleware
 app.use(morgan("tiny"));
@@ -28,6 +28,6 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/users", userRoutes);
 
-app.listen(port, () => {
-  console.log("Server listening on port " + port);
+app.listen(process.env.port, () => {
+  console.log("Server listening on port " + process.env.port);
 });
