@@ -78,11 +78,15 @@ router.post("/login", async (req, res) => {
   try {
     const user = await UserModal.findOne({ email: email });
     if (!user) {
-      throw Error("This email doesn't Exist");
+      let error = Error("This email doesn't Exist");
+      error.code = 401;
+      throw error;
     }
     const isPasswordValid = bcrypt.compareSync(password, user.password);
     if (!isPasswordValid) {
-      throw Error("Password is not valid");
+      let error = Error("Password is not valid");
+      error.code = 401;
+      throw error;
     }
     user.password = undefined;
 
@@ -97,7 +101,9 @@ router.post("/login", async (req, res) => {
       user,
     });
   } catch (error) {
-    res.status(500).send({ status: 500, error: error, msg: error.message });
+    res
+      .status(error.code || 500)
+      .send({ status: error.code || 500, error: error, msg: error.message });
   }
 });
 
